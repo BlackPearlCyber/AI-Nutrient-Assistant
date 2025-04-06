@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Nutrition Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f9f7;
+      color: #2c3e50;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 30px 0 10px;
+      font-size: 36px;
+      color: #16a085;
+    }
+
+    h2 {
+      color: #16a085;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .profile-form {
+      background: #fff;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button[type="submit"] {
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
+      background-color: #1abc9c;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #16a085;
+    }
+
+    #mealSuggestions {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    #meals ul {
+      margin-left: 20px;
+      padding-left: 15px;
+    }
+
+    #meals li {
+      font-size: 16px;
+      color: #34495e;
+      margin-bottom: 8px;
+    }
+
+    #meals strong {
+      color: #1abc9c;
+    }
+
+    /* Chatbot Section */
+    #chatbot-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    #chatbot {
+      background: #fefefe;
+      padding: 25px 30px;
+      border-radius: 15px;
+      border: 2px solid #1abc9c;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    #chatbot h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    #userQuestion {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    #chatbotResponse {
+      background: #ffffff;
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 15px;
+      color: #333;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    button.ask-btn {
+      width: 100%;
+      background-color: #1abc9c;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button.ask-btn:hover {
+      background-color: #149c85;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🥗 AI Nutrition Assistant</h1>
+
+  <!-- Form Section -->
+  <div class="profile-form">
+    <h2>Tell Me About You</h2>
+    <form id="profileForm">
+      <label for="diet">Diet:</label>
+      <select id="diet" required>
+        <option value="vegetarian">Vegetarian</option>
+        <option value="non-vegetarian">Non-Vegetarian</option>
+      </select>
+
+      <label for="meal">Meal:</label>
+      <select id="meal" required>
+        <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
+      </select>
+
+      <label for="age">Age:</label>
+      <input type="number" id="age" min="1" required>
+
+      <button type="submit">🍽 Get Suggestions</button>
+    </form>
+  </div>
+
+  <!-- Suggestions Output -->
+  <div id="mealSuggestions" style="display:none;">
+    <h2>🍴 Meal Suggestions</h2>
+    <div id="meals"></div>
+  </div>
+
+  <!-- Chatbot Section -->
+<!-- Chatbot UI -->
+<div id="chatbot-wrapper" style="display:flex; justify-content:center; padding:20px;">
+  <div id="chatbot" style="width:100%; max-width:450px; display:flex; flex-direction:column; height:80vh; border-radius:15px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1); font-family:'Segoe UI',sans-serif;">
+
+    <div style="background: linear-gradient(45deg, #16a085, #1abc9c); color:#fff; padding:15px; display:flex; justify-content:space-between; align-items:center;">
+      <strong>🤖 NutriBot</strong>
+      <button onclick="clearChat()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">🗑️</button>
+    </div>
+
+    <div id="chatWindow" style="flex:1; padding:15px; overflow-y:auto; background:#fafafa; display:flex; flex-direction:column; gap:12px;">
+      <div style="color:#aaa; text-align:center;">💡 Ask me anything about health & nutrition!</div>
+    </div>
+
+    <div style="display:flex; border-top:1px solid #ddd; background:#fff;">
+      <input type="text" id="userQuestion" placeholder="Type your question..." style="flex:1; padding:12px 15px; border:none; outline:none; font-size:14px;">
+      <button onclick="askQuestion()" style="padding:0 20px; border:none; background:#1abc9c; color:#fff; font-size:20px; cursor:pointer;">➤</button>
+    </div>
+
+  </div>
+</div>
+<script src="script.js"></script>
+
+<script>
+const toggle = document.getElementById('darkModeToggle');
+toggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+});
+</script>
+
+</body>
+</html>
