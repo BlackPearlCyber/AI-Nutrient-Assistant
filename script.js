@@ -43,7 +43,7 @@ document.getElementById('profileForm').addEventListener('submit', async function
   Use clear bullet points and short paragraphs for easy reading.`;
   
     try {
-      const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/api_keyY", {
+      const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/api_key", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -211,5 +211,3 @@ function clearChat() {
     chatWindow.innerHTML = `<div style="color:#aaa; text-align:center;">💡 Ask me anything about health & nutrition!</div>`;
   }
 }
-
-
